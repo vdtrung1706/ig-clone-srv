@@ -5,11 +5,18 @@ export default gql`
     token: String!
     user: User!
   }
-  input AuthInput {
+  input SigninInput {
     email: String!
     password: String!
   }
+  input SignupInput {
+    email: String!
+    password: String!
+    username: String!
+    fullName: String!
+  }
   type Mutation {
-    signin(input: AuthInput!): AuthUser!
+    signin(input: SigninInput!): AuthUser!
+    signup(input: SignupInput!): AuthUser!
   }
 `;

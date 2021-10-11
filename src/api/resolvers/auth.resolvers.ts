@@ -6,19 +6,39 @@ type AuthUser = {
   token: string;
   user: IUser;
 };
+type InputType = {
+  input: any;
+};
 
 export default {
   Mutation: {
     signin: async (
       _: unknown,
-      { input }: { input: any },
+      { input }: InputType,
       context: IContext
     ): Promise<AuthUser> => {
-      const user = await context.models.User.findOne(input);
-      if (!user) {
-        throw new AuthenticationError('Invalid password + email');
+      const user = await context.models.User.findOne({ email: input.email });
+      const match = await user.checkPassword(input.password);
+
+      if (!user || !match) {
+        throw new AuthenticationError('Invalid password or email');
       }
+
       const token = context.createToken(user);
+      return { token, user };
+    },
+    signup: async (
+      _: unknown,
+      { input }: InputType,
+      { createToken, models }: IContext
+    ): Promise<AuthUser> => {
+      const existing = await models.User.findOne({ email: input.email });
+      if (existing) {
+        throw new AuthenticationError('Account existed!');
+      }
+
+      const user = await models.User.create(input);
+      const token = createToken(user);
 
       return { token, user };
     },

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { IUser } from '../interfaces/IUser';
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema<IUser>(
   {
@@ -51,6 +52,32 @@ const userSchema = new mongoose.Schema<IUser>(
     ],
   },
   { timestamps: true }
+);
+
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password')) {
+    return next();
+  }
+
+  bcrypt.hash(this.password, 8, (err, hash) => {
+    if (err) return next(err);
+    this.password = hash;
+    next();
+  });
+});
+
+userSchema.method(
+  'checkPassword',
+  function (password: string): Promise<boolean> {
+    const passwordHash = this.password;
+
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(password, passwordHash, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+  }
 );
 
 const User = mongoose.model<IUser>('user', userSchema);

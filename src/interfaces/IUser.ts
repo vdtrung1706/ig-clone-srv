@@ -12,4 +12,5 @@ export interface IUser extends Document {
   private?: boolean;
   confirmed?: boolean;
   bookmarks?: Array<{ post: IPost }>;
+  checkPassword: (password: string) => Promise<boolean>;
 }
