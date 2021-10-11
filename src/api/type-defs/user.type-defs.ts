@@ -14,6 +14,6 @@ export default gql`
     bookmarks: [Post]
   }
   type Query {
-    hello: String
+    users: [User]!
   }
 `;

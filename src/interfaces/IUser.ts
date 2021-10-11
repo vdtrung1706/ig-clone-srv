@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import { PostInterface } from './PostInterface';
+import { Document } from 'mongoose';
+import { IPost } from './IPost';
 
-export interface UserInterface {
+export interface IUser extends Document {
   email: string;
   username: string;
   password: string;
@@ -11,5 +11,5 @@ export interface UserInterface {
   website?: string;
   private?: boolean;
   confirmed?: boolean;
-  bookmarks?: Array<{ post: mongoose.Model<PostInterface> }>;
+  bookmarks?: Array<{ post: IPost }>;
 }

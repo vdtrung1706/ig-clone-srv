@@ -7,6 +7,8 @@ import cors from 'cors';
 import express from 'express';
 import * as http from 'http';
 import { typeDefs, resolvers } from './api';
+import { createToken } from './api/middlewares/auth';
+import { IContext } from './interfaces/IContext';
 
 startApolloServer().catch((err) => console.log(err));
 
@@ -26,6 +28,18 @@ async function startApolloServer(): Promise<void> {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context: ({ req, res }): IContext => {
+      const models = db.models;
+      const token = req.headers.authorization;
+
+      return {
+        res,
+        req,
+        token,
+        models,
+        createToken,
+      };
+    },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
