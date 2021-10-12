@@ -1,9 +1,10 @@
 import { ExpressContext } from 'apollo-server-express';
-import { models } from '../db';
 import { createToken } from '../api/middlewares/auth';
+import { models } from '../db';
+import { IUser } from './IUser';
 
 export interface IContext extends ExpressContext {
-  token?: string;
+  user?: IUser;
   models?: typeof models;
   createToken?: typeof createToken;
 }

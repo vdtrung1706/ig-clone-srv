@@ -1,13 +1,13 @@
-import * as db from './db';
-import config from './config';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import { ApolloServer } from 'apollo-server-express';
 import { json, urlencoded } from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import * as http from 'http';
-import { typeDefs, resolvers } from './api';
-import { createToken } from './api/middlewares/auth';
+import { resolvers, typeDefs } from './api';
+import { createToken, getUserFromToken } from './api/middlewares/auth';
+import config from './config';
+import * as db from './db';
 import { IContext } from './interfaces/IContext';
 
 startApolloServer().catch((err) => console.log(err));
@@ -28,14 +28,15 @@ async function startApolloServer(): Promise<void> {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req, res }): IContext => {
+    context: async ({ req, res }): Promise<IContext> => {
       const models = db.models;
       const token = req.headers.authorization;
+      const user = await getUserFromToken(token);
 
       return {
         res,
         req,
-        token,
+        user,
         models,
         createToken,
       };
