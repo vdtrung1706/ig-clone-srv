@@ -17,14 +17,20 @@ export default {
       { input }: InputType,
       context: IContext
     ): Promise<AuthUser> => {
-      const user = await context.models.User.findOne({ email: input.email });
-      const match = await user.checkPassword(input.password);
+      const user = await context.models.User.findOne({
+        email: input.email,
+      }).exec();
+      if (!user) {
+        throw new AuthenticationError('Invalid password or email');
+      }
 
-      if (!user || !match) {
+      const match = await user.checkPassword(input.password);
+      if (!match) {
         throw new AuthenticationError('Invalid password or email');
       }
 
       const token = context.createToken(user);
+
       return { token, user };
     },
     signup: async (

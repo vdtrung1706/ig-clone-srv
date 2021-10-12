@@ -38,16 +38,14 @@ const userSchema = new mongoose.Schema<IUser>(
       type: Boolean,
       default: false,
     },
-    confirmed: {
+    verified: {
       type: Boolean,
       default: false,
     },
     bookmarks: [
       {
-        post: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'post',
-        },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'post',
       },
     ],
   },

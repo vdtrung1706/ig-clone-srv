@@ -8,4 +8,23 @@ export default gql`
     hashtags: [String]
     createdAt: String
   }
+  input NewPostInput {
+    image: String
+    caption: String
+    hashtags: [String]
+  }
+  input UpdatePostInput {
+    id: String!
+    image: String
+    caption: String
+    hashtags: [String]
+  }
+  type Query {
+    post(id: ID!): Post!
+    posts: [Post!]
+  }
+  type Mutation {
+    createPost(input: NewPostInput!): Post!
+    updatePost(input: UpdatePostInput!): Post
+  }
 `;

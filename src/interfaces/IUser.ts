@@ -10,7 +10,7 @@ export interface IUser extends Document {
   bio?: string;
   website?: string;
   private?: boolean;
-  confirmed?: boolean;
+  verified?: boolean;
   bookmarks?: Array<{ post: IPost }>;
   checkPassword: (password: string) => Promise<boolean>;
 }

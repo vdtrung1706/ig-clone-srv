@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import User from '../../models/user';
 import { IContext } from '../../interfaces/IContext';
 
-type jwtPayload = string | (jwt.JwtPayload & { id: string });
+type jwtPayload = jwt.JwtPayload & { id: string };
 
 /**
  * takes user object and create jwt out of it
@@ -21,10 +21,9 @@ export function createToken({ id, username }: IUser): string {
  */
 export async function getUserFromToken(token: string): Promise<IUser> {
   try {
-    const user = jwt.verify(token, config.jwtSecret) as jwtPayload;
-    return await User.findOne({
-      id: typeof user === 'string' ? user : user.id,
-    });
+    const userAuth = jwt.verify(token, config.jwtSecret) as jwtPayload;
+    const user = await User.findById(userAuth.id).exec();
+    return user;
   } catch (err) {
     return new Promise((resolve) => resolve(null));
   }
