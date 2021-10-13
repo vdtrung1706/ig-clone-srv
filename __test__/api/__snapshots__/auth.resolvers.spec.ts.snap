@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Auth Resolvers sign up successfully 1`] = `
+Object {
+  "data": Object {
+    "signup": Object {
+      "user": Object {
+        "email": "test@snapshot.com",
+        "fullName": "Testing",
+        "username": "test_signup",
+      },
+    },
+  },
+}
+`;

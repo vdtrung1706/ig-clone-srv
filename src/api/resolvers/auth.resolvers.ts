@@ -38,7 +38,7 @@ export default {
       { input }: InputType,
       { createToken, models }: IContext
     ): Promise<AuthUser> => {
-      const existing = await models.User.findOne({ email: input.email });
+      const existing = await models.User.findOne({ email: input.email }).exec();
       if (existing) {
         throw new AuthenticationError('Account existed!');
       }
