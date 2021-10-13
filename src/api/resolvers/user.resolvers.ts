@@ -11,7 +11,6 @@ export default {
         .populate('bookmarks')
         .lean()
         .exec();
-
       return user;
     }),
     users: authenticated(async (_, __, context: IContext) => {

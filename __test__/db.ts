@@ -3,19 +3,20 @@ import mongoose from 'mongoose';
 
 dotenv.config();
 
-export async function connectToDb(): Promise<void> {
-  await mongoose.connect(process.env.DB_TESTING_URL);
+export async function connectToDb(endoint: string): Promise<void> {
+  await mongoose.connect(process.env.DB_TESTING_URL + `-${endoint}`);
 }
 
-export async function dropDb(): Promise<boolean> {
+export async function dropDb(): Promise<void> {
   if (mongoose.connection.readyState === 1) {
-    return await mongoose.connection.db.dropDatabase();
+    await mongoose.connection.db
+      .dropDatabase()
+      .catch((err) => console.log(err));
   }
-  return false;
 }
 
 export async function disconnectDb(): Promise<void> {
-  return await mongoose.disconnect();
+  await mongoose.disconnect();
 }
 
 export function generateMongooseId(): mongoose.Types.ObjectId {

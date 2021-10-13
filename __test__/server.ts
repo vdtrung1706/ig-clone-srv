@@ -8,6 +8,7 @@ import { resolvers, typeDefs } from '../src/api';
 import { createToken, getUserFromToken } from '../src/api/middlewares/auth';
 import * as db from '../src/db';
 import { IContext } from '../src/interfaces/IContext';
+import { IUser } from '../src/interfaces/IUser';
 
 // Create a test client from a lib: apollo-server-integration-testing
 
@@ -106,12 +107,22 @@ export function createTestClient({
   };
 }
 
-export function createServer(): ApolloServer<ExpressContext> {
+export function createServer(userMock: IUser): ApolloServer<ExpressContext> {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: async ({ req, res }): Promise<IContext> => {
       const models = db.models;
+      if (userMock) {
+        return {
+          res,
+          req,
+          user: userMock,
+          models,
+          createToken,
+        };
+      }
+
       const token = req.headers.authorization;
       const user = await getUserFromToken(token);
 
@@ -128,6 +139,13 @@ export function createServer(): ApolloServer<ExpressContext> {
   return server;
 }
 
-export const testClient = createTestClient({
-  apolloServer: createServer(),
-});
+export const createTestServer = (
+  userMock?: IUser
+): {
+  query: TestQuery;
+  mutate: TestQuery;
+  setOptions: TestSetOptions;
+} =>
+  createTestClient({
+    apolloServer: createServer(userMock),
+  });

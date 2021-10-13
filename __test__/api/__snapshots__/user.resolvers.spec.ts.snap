@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`User Resolvers query user by id & bookmarks should be in a corrected form 1`] = `
+Object {
+  "user": Object {
+    "bookmarks": Array [
+      Object {
+        "caption": "post number 1",
+      },
+    ],
+    "email": "vdtrung@gmail.com",
+    "fullName": "Vu Dinh Trung",
+    "username": "vdtrung",
+  },
+}
+`;

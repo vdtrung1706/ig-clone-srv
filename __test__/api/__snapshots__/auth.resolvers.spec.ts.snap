@@ -5,9 +5,9 @@ Object {
   "data": Object {
     "signup": Object {
       "user": Object {
-        "email": "test@snapshot.com",
-        "fullName": "Testing",
-        "username": "test_signup",
+        "email": "vdtrung@gmail.com",
+        "fullName": "Vu Dinh Trung",
+        "username": "vdtrung",
       },
     },
   },

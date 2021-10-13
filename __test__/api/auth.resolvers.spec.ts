@@ -1,6 +1,6 @@
 import * as db from '../db';
-import { testClient } from '../server';
-import { user } from '../mocks';
+import { createTestServer } from '../server';
+import { userMock } from '../mocks';
 import { gql } from 'apollo-server-core';
 
 const SIGNIN_MUTATION = gql`
@@ -37,43 +37,40 @@ const GET_ME = gql`
   }
 `;
 
-beforeAll(db.connectToDb);
-
-afterAll(db.dropDb);
-afterAll(db.disconnectDb);
-
 describe('Auth Resolvers', () => {
-  beforeAll(db.connectToDb);
+  beforeAll(() => db.connectToDb('auth'));
 
   afterAll(db.dropDb);
   afterAll(db.disconnectDb);
 
+  const server = createTestServer();
+
   it('sign up successfully', async () => {
-    const result = await testClient.mutate(SIGNUP_MUTATION, {
+    const result = await server.mutate(SIGNUP_MUTATION, {
       variables: {
-        input: user,
+        input: userMock,
       },
     });
     expect(result).toMatchSnapshot();
   });
 
   it('sign in successfully w/ token req', async () => {
-    const result = (await testClient.mutate(SIGNIN_MUTATION, {
+    const result = (await server.mutate(SIGNIN_MUTATION, {
       variables: {
         input: {
-          email: user.email,
-          password: user.password,
+          email: userMock.email,
+          password: userMock.password,
         },
       },
     })) as any;
 
     expect(result.data.signin.user).toEqual({
-      email: user.email,
-      username: user.username,
-      fullName: user.fullName,
+      email: userMock.email,
+      username: userMock.username,
+      fullName: userMock.fullName,
     });
 
-    testClient.setOptions({
+    server.setOptions({
       request: {
         headers: {
           authorization: result.data.signin.token,
@@ -81,12 +78,12 @@ describe('Auth Resolvers', () => {
       },
     });
 
-    const { data } = await testClient.query(GET_ME);
+    const { data } = await server.query(GET_ME);
 
     expect(data).toEqual({
       me: {
-        email: user.email,
-        username: user.username,
+        email: userMock.email,
+        username: userMock.username,
       },
     });
   });
