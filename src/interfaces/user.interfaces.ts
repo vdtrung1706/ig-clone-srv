@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { IPost } from './IPost';
+import { IPost } from './post.interfaces';
 
 export interface IUser extends Document {
   email: string;

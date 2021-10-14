@@ -2,6 +2,7 @@ import { gql } from 'apollo-server-core';
 
 export default gql`
   type User {
+    _id: String!
     email: String!
     username: String!
     password: String!

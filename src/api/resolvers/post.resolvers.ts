@@ -1,4 +1,4 @@
-import { IContext } from '../../interfaces/IContext';
+import { IContext } from '../../interfaces/context.interfaces';
 import { authenticated } from '../middlewares/auth';
 
 export default {

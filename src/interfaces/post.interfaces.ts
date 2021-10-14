@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { IUser } from './IUser';
+import { IUser } from './user.interfaces';
 
 export interface IPost extends Document {
   author: IUser;

@@ -8,7 +8,7 @@ import { resolvers, typeDefs } from './api';
 import { createToken, getUserFromToken } from './api/middlewares/auth';
 import config from './config';
 import * as db from './db';
-import { IContext } from './interfaces/IContext';
+import { IContext } from './interfaces/context.interfaces';
 
 startApolloServer().catch((err) => console.log(err));
 

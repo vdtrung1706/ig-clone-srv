@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
-import User from '../models/user';
+import Comment from '../models/comment';
 import Post from '../models/post';
+import User from '../models/user';
 
 export function connect(url: string): Promise<typeof mongoose> {
   return mongoose.connect(url);
@@ -9,4 +10,5 @@ export function connect(url: string): Promise<typeof mongoose> {
 export const models = {
   User,
   Post,
+  Comment,
 };

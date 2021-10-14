@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-errors';
-import { IContext as IContext } from '../../interfaces/IContext';
-import { IUser } from '../../interfaces/IUser';
+import { IContext as IContext } from '../../interfaces/context.interfaces';
+import { IUser } from '../../interfaces/user.interfaces';
 
 type AuthUser = {
   token: string;
