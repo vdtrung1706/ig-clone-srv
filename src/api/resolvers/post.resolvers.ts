@@ -4,17 +4,11 @@ import { authenticated } from '../middlewares/auth';
 export default {
   Query: {
     post: authenticated(async (_, { id }, context: IContext) => {
-      const post = await context.models.Post.findById(id)
-        .populate('author')
-        .lean()
-        .exec();
+      const post = await context.models.Post.findById(id).lean().exec();
       return post;
     }),
     posts: authenticated(async (_, __, { models, user }: IContext) => {
-      const posts = await models.Post.find({ author: user.id })
-        .populate('author')
-        .lean()
-        .exec();
+      const posts = await models.Post.find({ author: user.id }).lean().exec();
       return posts;
     }),
   },
@@ -24,21 +18,19 @@ export default {
         ...input,
         author: context.user.id,
       });
-      return post.populate('author');
+      return post;
     }),
     updatePost: authenticated(async (_, { input }, { models }: IContext) => {
-      const updatedUser = await models.Post.updateOne(
+      const post = await models.Post.findOneAndUpdate(
         { _id: input.id },
         input,
         {
           new: true,
         }
       )
-        .populate('bookmarks')
         .lean()
         .exec();
-
-      return updatedUser;
+      return post;
     }),
   },
 };

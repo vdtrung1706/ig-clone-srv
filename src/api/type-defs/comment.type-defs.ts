@@ -23,6 +23,7 @@ export default gql`
     content: String!
   }
   type Query {
+    comment(id: String!): Comment
     comments(postId: String!): [Comment!]
   }
   type Mutation {
