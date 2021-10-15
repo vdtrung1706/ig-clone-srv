@@ -13,6 +13,10 @@ export default gql`
     private: Boolean
     verified: Boolean
     bookmarks: [Post]
+    followers: [User]
+    following: [User]
+    createdAt: String
+    updatedAt: String
   }
   input UpdateMeInput {
     email: String
@@ -24,7 +28,6 @@ export default gql`
     website: String
     private: Boolean
     verified: Boolean
-    bookmarks: [UpdatePostInput]
   }
   type Query {
     me: User!
@@ -32,6 +35,8 @@ export default gql`
     users: [User!]
   }
   type Mutation {
-    updateMe(input: UpdateMeInput!): User
+    updateMe(input: UpdateMeInput!): User!
+    toggleFollow(id: String!): User!
+    deleteFollower(id: String!): User!
   }
 `;
