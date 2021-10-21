@@ -21,11 +21,11 @@ export default gql`
     hashtags: [String]
   }
   type Query {
-    post(id: ID!): Post!
-    posts: [Post!]
+    post(id: ID!): Post
+    posts: [Post]
   }
   type Mutation {
-    createPost(input: NewPostInput!): Post!
+    createPost(input: NewPostInput!): Post
     updatePost(input: UpdatePostInput!): Post
   }
 `;

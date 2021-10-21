@@ -48,14 +48,12 @@ async function startApolloServer(): Promise<void> {
 
   server.applyMiddleware({
     app,
-    path: config.api.prefix,
+    path: '/',
   });
 
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: config.port }, resolve)
   );
 
-  console.log(
-    `🚀 [Server]: http://localhost:${config.port}${config.api.prefix}`
-  );
+  console.log(`🚀 [Server]: http://localhost:${config.port}`);
 }
