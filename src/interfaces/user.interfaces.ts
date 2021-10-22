@@ -12,7 +12,5 @@ export interface IUser extends Document {
   private?: boolean;
   verified?: boolean;
   bookmarks?: IPost[];
-  followers?: IUser[];
-  following?: IUser[];
   checkPassword: (password: string) => Promise<boolean>;
 }

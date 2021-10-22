@@ -36,7 +36,5 @@ export default gql`
   }
   type Mutation {
     updateMe(input: UpdateMeInput!): User!
-    toggleFollow(id: String!): User!
-    deleteFollower(id: String!): User!
   }
 `;
