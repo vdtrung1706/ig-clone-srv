@@ -1,4 +1,4 @@
-import { IContext } from '../../interfaces/context.interfaces';
+import { IContext } from '../../interfaces';
 import { authenticated } from '../middlewares/auth';
 
 const popArr = ['user', 'followers', 'following'];

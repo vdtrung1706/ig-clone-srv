@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server-errors';
-import { IContext as IContext } from '../../interfaces/context.interfaces';
-import { IUser } from '../../interfaces/user.interfaces';
+import { IContext as IContext } from '../../interfaces';
+import { IUser } from '../../interfaces';
 
 type AuthUser = {
   token: string;
@@ -20,6 +20,7 @@ export default {
       const user = await context.models.User.findOne({
         email: input.email,
       }).exec();
+
       if (!user) {
         throw new AuthenticationError('Invalid password or email');
       }

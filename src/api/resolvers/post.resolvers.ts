@@ -1,4 +1,4 @@
-import { IContext } from '../../interfaces/context.interfaces';
+import { IContext } from '../../interfaces';
 import { authenticated } from '../middlewares/auth';
 
 export default {
@@ -8,6 +8,7 @@ export default {
         .populate('author')
         .lean()
         .exec();
+
       return post;
     }),
     posts: authenticated(async (_, __, { models, user }: IContext) => {
@@ -15,10 +16,12 @@ export default {
         const posts = await models.Post.find({ author: user.id })
           .populate('author')
           .exec();
+
         return posts;
       } catch (err) {
         console.log(err);
       }
+
       return [];
     }),
   },
@@ -28,6 +31,7 @@ export default {
         ...input,
         author: context.user.id,
       });
+
       return await post.populate('author');
     }),
     updatePost: authenticated(async (_, { input }, { models }: IContext) => {
@@ -41,6 +45,7 @@ export default {
         .populate('author')
         .lean()
         .exec();
+
       return post;
     }),
   },

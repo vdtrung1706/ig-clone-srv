@@ -1,10 +1,11 @@
-import { IContext } from '../../interfaces/context.interfaces';
+import { IContext } from '../../interfaces';
 import { authenticated } from '../middlewares/auth';
 
 export default {
   Query: {
     comment: authenticated(async (_, { id }, { models }: IContext) => {
       const comment = await models.Comment.findById(id).lean().exec();
+
       return comment;
     }),
     comments: authenticated(async (_, { postId }, { models }: IContext) => {
@@ -13,6 +14,7 @@ export default {
       })
         .lean()
         .exec();
+
       return comments;
     }),
   },
@@ -25,7 +27,9 @@ export default {
           post: input.postId,
           author: user.id,
         });
+
         const query = await models.Comment.findById(comment.id).lean().exec();
+
         return query;
       }
     ),

@@ -1,8 +1,8 @@
 import config from '../../config';
-import { IUser } from '../../interfaces/user.interfaces';
+import { IUser } from '../../interfaces';
 import jwt from 'jsonwebtoken';
 import User from '../../models/user';
-import { IContext } from '../../interfaces/context.interfaces';
+import { IContext } from '../../interfaces';
 
 type jwtPayload = jwt.JwtPayload & { id: string };
 
