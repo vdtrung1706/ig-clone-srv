@@ -5,14 +5,16 @@ const popArr = ['user', 'followers', 'following'];
 
 export default {
   Query: {
-    getFollow: authenticated(async (_, __, { user, models }: IContext) => {
-      const follow = await models.Follow.findOne({ user: user.id })
-        .populate(popArr)
-        .lean()
-        .exec();
+    getFollow: authenticated(
+      async (_, { userId }, { user, models }: IContext) => {
+        const follow = await models.Follow.findOne({ user: userId || user.id })
+          .populate(popArr)
+          .lean()
+          .exec();
 
-      return follow;
-    }),
+        return follow;
+      }
+    ),
   },
   Mutation: {
     toggleFollow: authenticated(
@@ -71,7 +73,7 @@ export default {
     deleteFollower: authenticated(
       async (_, { userId }, { user, models }: IContext) => {
         const updatedFollow = await models.Follow.updateOne(
-          { user: user.id, followers: { $ne: userId } },
+          { user: user.id },
           {
             $pull: {
               followers: userId,
@@ -82,10 +84,7 @@ export default {
         // unfollowing of the follower
         if (updatedFollow.modifiedCount > 0) {
           await models.Follow.updateOne(
-            {
-              user: userId,
-              following: { $ne: user.id },
-            },
+            { user: userId },
             {
               $pull: {
                 following: user.id,

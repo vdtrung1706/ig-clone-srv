@@ -16,21 +16,22 @@ export default gql`
   }
   input NewReplyInput {
     content: String!
-    postId: String!
+    postId: String
     replyTo: String!
   }
   input UpdateCommentInput {
+    commentId: String!
     content: String!
   }
   type Query {
-    comment(id: String!): Comment
+    comment(commentId: String!): Comment
     comments(postId: String!): [Comment!]
   }
   type Mutation {
     createComment(input: NewCommentInput!): Comment!
     createReply(input: NewReplyInput!): Comment!
     updateComment(input: UpdateCommentInput!): Comment!
-    deleteComment(id: String!): Comment!
-    toggleLike(id: String): Comment!
+    deleteComment(commentId: String!): Comment!
+    toggleLike(commentId: String!): Comment!
   }
 `;

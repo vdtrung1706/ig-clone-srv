@@ -1,10 +1,33 @@
 import { IContext } from '../../interfaces';
 import { authenticated } from '../middlewares/auth';
 
+const popArr = [
+  'author',
+  'post',
+  'likes',
+  {
+    path: 'replies',
+    populate: {
+      path: 'author',
+      model: 'user',
+    },
+  },
+  {
+    path: 'replyTo',
+    populate: {
+      path: 'author',
+      model: 'user',
+    },
+  },
+];
+
 export default {
   Query: {
-    comment: authenticated(async (_, { id }, { models }: IContext) => {
-      const comment = await models.Comment.findById(id).lean().exec();
+    comment: authenticated(async (_, { commentId }, { models }: IContext) => {
+      const comment = await models.Comment.findById(commentId)
+        .populate(popArr)
+        .lean()
+        .exec();
 
       return comment;
     }),
@@ -12,6 +35,7 @@ export default {
       const comments = await models.Comment.find({
         post: postId,
       })
+        .populate(popArr)
         .lean()
         .exec();
 
@@ -28,7 +52,10 @@ export default {
           author: user.id,
         });
 
-        const query = await models.Comment.findById(comment.id).lean().exec();
+        const query = await models.Comment.findById(comment.id)
+          .populate(popArr)
+          .lean()
+          .exec();
 
         return query;
       }
@@ -53,45 +80,69 @@ export default {
           }
         );
 
-        const query = await models.Comment.findById(reply.id).lean().exec();
+        const query = await models.Comment.findById(reply.id)
+          .populate(popArr)
+          .lean()
+          .exec();
 
         return query;
       }
     ),
     updateComment: authenticated(async (_, { input }, { models }: IContext) => {
       const comment = await models.Comment.findOneAndUpdate(
-        { _id: input.it },
+        { _id: input.commentId },
         input,
         {
           new: true,
         }
       )
+        .populate(popArr)
         .lean()
         .exec();
 
       return comment;
     }),
-    deleteComment: authenticated(async (_, { id }, { models }: IContext) => {
-      const comment = await models.Comment.findOne({ _id: id }).exec();
+    deleteComment: authenticated(
+      async (_, { commentId }, { models }: IContext) => {
+        const comment = await models.Comment.findOne({ _id: commentId }).exec();
 
-      await comment.deleteOne();
+        await comment.deleteOne();
 
-      return comment;
-    }),
-    toggleLike: authenticated(async (_, { id }, { user, models }: IContext) => {
-      const comment = await models.Comment.findOneAndUpdate({ _id: id }).exec();
-
-      if (comment) {
-        const userIdx = comment.likes.findIndex((item) => item._id == user.id);
-        if (userIdx !== -1) {
-          comment.likes.splice(userIdx);
-        } else {
-          comment.likes.push(user);
-        }
-        comment.save();
+        return comment;
       }
+    ),
+    toggleLike: authenticated(
+      async (_, { commentId }, { user, models }: IContext) => {
+        const updatedComment = await models.Comment.updateOne(
+          { _id: commentId, likes: { $ne: user.id } },
+          {
+            $push: {
+              likes: user.id,
+            },
+          }
+        );
 
-      return comment;
-    }),
+        // if user've already liked then remove it from the likes,
+        if (updatedComment.modifiedCount === 0) {
+          await models.Comment.updateOne(
+            {
+              _id: commentId,
+            },
+            {
+              $pull: {
+                likes: user.id,
+              },
+            }
+          );
+        }
+
+        const comment = await models.Comment.findById(commentId)
+          .populate(popArr)
+          .lean()
+          .exec();
+
+        return comment;
+      }
+    ),
   },
 };

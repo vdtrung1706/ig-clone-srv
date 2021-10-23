@@ -5,6 +5,7 @@ const followSchema = new Schema<IFollow>({
   user: {
     type: Schema.Types.ObjectId,
     require: true,
+    unique: true,
     ref: 'user',
   },
   followers: [

@@ -15,6 +15,11 @@ const postSchema = new mongoose.Schema<IPost>(
   { timestamps: true }
 );
 
+postSchema.pre('deleteOne', { document: true }, async function (next) {
+  await mongoose.model('comment').deleteMany({ postId: this._id });
+  next();
+});
+
 const Post = mongoose.model<IPost>('post', postSchema);
 
 export default Post;

@@ -3,8 +3,8 @@ import { authenticated } from '../middlewares/auth';
 
 export default {
   Query: {
-    post: authenticated(async (_, { id }, context: IContext) => {
-      const post = await context.models.Post.findById(id)
+    post: authenticated(async (_, { postId }, context: IContext) => {
+      const post = await context.models.Post.findById(postId)
         .populate('author')
         .lean()
         .exec();
@@ -36,7 +36,7 @@ export default {
     }),
     updatePost: authenticated(async (_, { input }, { models }: IContext) => {
       const post = await models.Post.findOneAndUpdate(
-        { _id: input.id },
+        { _id: input.postId },
         input,
         {
           new: true,
@@ -45,6 +45,13 @@ export default {
         .populate('author')
         .lean()
         .exec();
+
+      return post;
+    }),
+    deletePost: authenticated(async (_, { postId }, { models }: IContext) => {
+      const post = await models.Post.findOne({ _id: postId }).exec();
+
+      await post.deleteOne();
 
       return post;
     }),

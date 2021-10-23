@@ -15,17 +15,18 @@ export default gql`
     hashtags: [String]
   }
   input UpdatePostInput {
-    id: String!
+    postId: String!
     image: String
     caption: String
     hashtags: [String]
   }
   type Query {
-    post(id: ID!): Post
+    post(postId: ID!): Post
     posts: [Post]
   }
   type Mutation {
     createPost(input: NewPostInput!): Post
     updatePost(input: UpdatePostInput!): Post
+    deletePost(postId: String!): Post
   }
 `;

@@ -8,7 +8,7 @@ export default gql`
     followers: [User!]
   }
   type Query {
-    getFollow(userId: String!): Follow!
+    getFollow(userId: String): Follow!
   }
   type Mutation {
     toggleFollow(userId: String!): [User!]
