@@ -11,6 +11,9 @@ services:
     links:
       - db
     environment:
-      MONGO_CONNECTION_STRING: mongodb://db:27017
+      DB_URL: mongodb://db:27017
+      PORT: 8080
+      JWT_SECRET: eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTYzMzY4MTgwMywiaWF0IjoxNjMzNjgxODAzfQ.k_tVkUgg5TwZeqONnD3E3JOoArvwg7V7kDNymsVg03w
+      JWT_EXP: 10d
   db:
     image: mongo:5

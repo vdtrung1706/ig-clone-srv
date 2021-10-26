@@ -5,7 +5,6 @@ export default gql`
     _id: String!
     email: String!
     username: String!
-    password: String!
     fullName: String!
     avatar: String
     bio: String
@@ -13,8 +12,21 @@ export default gql`
     private: Boolean
     verified: Boolean
     bookmarks: [Post]
-    followers: [User]
-    following: [User]
+    createdAt: String
+    updatedAt: String
+  }
+  type Me {
+    _id: String!
+    email: String!
+    username: String!
+    fullName: String!
+    password: String!
+    avatar: String
+    bio: String
+    website: String
+    private: Boolean
+    verified: Boolean
+    bookmarks: [Post]
     createdAt: String
     updatedAt: String
   }
@@ -30,11 +42,10 @@ export default gql`
     verified: Boolean
   }
   type Query {
-    me: User!
+    me: Me!
     user(id: String!): User!
-    users: [User!]
   }
   type Mutation {
-    updateMe(input: UpdateMeInput!): User!
+    updateMe(input: UpdateMeInput!): Me!
   }
 `;

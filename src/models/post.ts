@@ -3,7 +3,7 @@ import { IPost } from '../interfaces';
 
 const postSchema = new mongoose.Schema<IPost>(
   {
-    author: {
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       require: true,
       ref: 'user',

@@ -7,11 +7,6 @@ const commentSchema = new Schema<IComment>(
       type: String,
       require: true,
     },
-    author: {
-      type: Schema.Types.ObjectId,
-      require: true,
-      ref: 'user',
-    },
     post: {
       type: Schema.Types.ObjectId,
       require: false,
@@ -36,6 +31,11 @@ const commentSchema = new Schema<IComment>(
         ref: 'comment',
       },
     ],
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      require: true,
+      ref: 'user',
+    },
   },
   { timestamps: true }
 );

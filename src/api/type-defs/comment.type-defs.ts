@@ -4,11 +4,11 @@ export default gql`
   type Comment {
     _id: String!
     content: String!
-    author: User!
     post: Post!
     likes: [User!]
     replyTo: Comment
     replies: [Comment]
+    createdBy: User!
   }
   input NewCommentInput {
     content: String!

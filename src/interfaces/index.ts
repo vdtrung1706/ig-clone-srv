@@ -30,19 +30,19 @@ export interface IFollow extends Document {
 }
 
 export interface IPost extends Document {
-  author: IUser;
   image?: string;
   caption?: string;
   hashtags?: Array<string>;
   createdAt?: string;
+  createdBy: IUser;
 }
 
 export interface IComment extends Document {
   content: string;
   createdAt?: string;
-  author: IUser;
   post: IPost;
   likes?: [IUser];
   replyTo?: IComment;
   replies?: [IComment];
+  createdBy: IUser;
 }

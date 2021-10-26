@@ -14,14 +14,6 @@ export default {
 
       return user;
     }),
-    users: authenticated(async (_, __, context: IContext) => {
-      const users = await context.models.User.find({})
-        .populate('bookmarks')
-        .lean()
-        .exec();
-
-      return users;
-    }),
   },
   Mutation: {
     updateMe: authenticated(

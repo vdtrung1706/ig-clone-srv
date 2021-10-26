@@ -2,20 +2,20 @@ import { IContext } from '../../interfaces';
 import { authenticated } from '../middlewares/auth';
 
 const popArr = [
-  'author',
+  'createdBy',
   'post',
   'likes',
   {
     path: 'replies',
     populate: {
-      path: 'author',
+      path: 'createdBy',
       model: 'user',
     },
   },
   {
     path: 'replyTo',
     populate: {
-      path: 'author',
+      path: 'createdBy',
       model: 'user',
     },
   },
@@ -49,7 +49,7 @@ export default {
         const comment = await models.Comment.create({
           content: input.content,
           post: input.postId,
-          author: user.id,
+          createdBy: user.id,
         });
 
         const query = await models.Comment.findById(comment.id)
@@ -64,7 +64,7 @@ export default {
       async (_, { input }, { user, models }: IContext) => {
         const reply = await models.Comment.create({
           content: input.content,
-          author: user.id,
+          createdBy: user.id,
           post: input.postId,
           replyTo: input.replyTo,
         });

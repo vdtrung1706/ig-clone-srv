@@ -3,10 +3,10 @@ import { gql } from 'apollo-server-core';
 export default gql`
   type Post {
     _id: String!
-    author: User!
     image: String
     caption: String
     hashtags: [String]
+    createdBy: User!
     createdAt: String
   }
   input NewPostInput {
@@ -23,6 +23,7 @@ export default gql`
   type Query {
     post(postId: ID!): Post
     posts: [Post]
+    recentPosts: [Post]
   }
   type Mutation {
     createPost(input: NewPostInput!): Post
